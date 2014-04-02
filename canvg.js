@@ -12,17 +12,17 @@
 
 	// export as AMD...
 	if ( typeof define !== 'undefined' && define.amd ) {
-		define([ 'rgbcolor' ], factory );
+		define([ 'rgbcolor', 'stackblur' ], factory );
 	}
 
 	// ...or as browserify
 	else if ( typeof module !== 'undefined' && module.exports ) {
-		module.exports = factory( require( 'rgbcolor' ) );
+		module.exports = factory( require( 'rgbcolor' ), require( 'stackblur' ) );
 	}
 
-	global.canvg = factory( global.RGBColor );
+	global.canvg = factory( global.RGBColor, global.stackBlur );
 
-}( typeof window !== 'undefined' ? window : this, function ( RGBColor ) {
+}( typeof window !== 'undefined' ? window : this, function ( RGBColor, stackBlur ) {
 
 	// canvg(target, s)
 	// empty parameters: replace all 'svg' elements on page with 'canvas' elements
@@ -2672,7 +2672,7 @@
 			this.extraFilterDistance = this.blurRadius;
 
 			this.apply = function(ctx, x, y, width, height) {
-				if (typeof(stackBlurCanvasRGBA) == 'undefined') {
+				if (typeof(stackBlur.canvasRGBA) == 'undefined') {
 					svg.log('ERROR: StackBlur.js must be included for blur to work');
 					return;
 				}
@@ -2681,7 +2681,7 @@
 				ctx.canvas.id = svg.UniqueId();
 				ctx.canvas.style.display = 'none';
 				document.body.appendChild(ctx.canvas);
-				stackBlurCanvasRGBA(ctx.canvas.id, x, y, width, height, this.blurRadius);
+				stackBlur.canvasRGBA(ctx.canvas.id, x, y, width, height, this.blurRadius);
 				document.body.removeChild(ctx.canvas);
 			}
 		}
